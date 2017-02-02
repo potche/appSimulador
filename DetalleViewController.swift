@@ -16,10 +16,13 @@ class DetalleViewController: UIViewController {
     @IBOutlet weak var lblMaker: UILabel!
     @IBOutlet weak var lblAulamaker: UILabel!
     @IBOutlet weak var lblProyector: UILabel!
+    @IBOutlet weak var lblImpresora3D: UILabel!
+    @IBOutlet weak var lblIapdMini: UILabel!
     @IBOutlet weak var lblTelepresencia: UILabel!
     @IBOutlet weak var lblAceleracion: UILabel!
     @IBOutlet weak var lblCertificacion: UILabel!
     @IBOutlet weak var lblDesarrollo: UILabel!
+    @IBOutlet weak var lblCertificacionETS: UILabel!
     @IBOutlet weak var lblSaldoPts: UILabel!
     @IBOutlet weak var lblTotalPagar: UILabel!
     @IBOutlet weak var lblExtensionAnios: UILabel!
@@ -42,10 +45,15 @@ class DetalleViewController: UIViewController {
         lblMaker.text = miPropuesta.makerCart.description
         lblAulamaker.text = miPropuesta.aulaMaker.description
         lblProyector.text = miPropuesta.proyector.description
+        lblImpresora3D.text = miPropuesta.impresora3D.description
+        lblIapdMini.text = miPropuesta.ipadMini.description
         lblTelepresencia.text = miPropuesta.telepresencia.description
         lblAceleracion.text = miPropuesta.aceleracon.description
         lblCertificacion.text = miPropuesta.certificacion.description
         lblDesarrollo.text = miPropuesta.desarrollo.description
+        lblCertificacionETS.text = miPropuesta.certEts.description
+        
+        
         lblSaldoPts.text = miPropuesta.totalPuntos.description
         lblTotalPagar.text = numberFormatter.string(from: NSNumber(value: miPropuesta.totalPesos))
         lblExtensionAnios.text = miPropuesta.totalAnios.description

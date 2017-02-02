@@ -21,10 +21,13 @@ class Propuesta: NSObject {
     var makerCart: Int = 0
     var aulaMaker: Int = 0
     var proyector: Int = 0
+    var impresora3D: Int = 0
     var telepresencia: Int = 0
+    var ipadMini: Int = 0
     var aceleracon: Int = 0
     var certificacion: Int = 0
     var desarrollo: Int = 0
+    var certEts: Int = 0
     var vendedorId: Int = 0
     var creationDate: Date = Date()
     var totalPesos: Double = 0

@@ -27,13 +27,15 @@ class SimuladorTableViewController: UITableViewController {
     
     // VALORES QUE DESCUENTA CADA ELEMENTO
     var stepAula = 2
-    var stepCart = 3
-    var stepMaker = 18
-    var stepProyecto = 2
-    var stepTele = 20
-    var stepAceleracion = 4
-    var stepCertificacion = 12
-    var stepDesarrollo = 20
+    var stepMaker = 20 //Maker Club
+    var stepCart = 4
+    var stepProyecto = 3
+    var stepImprespora3D = 2
+    var stepIpadMini = 1
+    var stepTele = 23 //AULA DE FORMACIÓN A DISTANCIA
+    var stepAceleracion = 5 //sincronizacion
+    var stepDesarrollo = 16
+    var stepCertificacion = 14
     var stepCertEts = 1
     
     // VARIABLES AUXILIARES PARA DETECTAR INCREMENTO O DECREMENTO
@@ -41,6 +43,8 @@ class SimuladorTableViewController: UITableViewController {
     var tmpStepCart = 0
     var tmpStepMaker = 0
     var tmpStepProyecto = 0
+    var tmpStepImpresora3D = 0
+    var tmpStepIpadMini = 0
     var tmpStepTele = 0
     var tmpStepAceleracion = 0
     var tmpStepCertificacion = 0
@@ -74,6 +78,8 @@ class SimuladorTableViewController: UITableViewController {
     @IBOutlet weak var lblCart: UILabel!
     @IBOutlet weak var lblMaker: UILabel!
     @IBOutlet weak var lblProyecto: UILabel!
+    @IBOutlet weak var lblImpresora3D: UILabel!
+    @IBOutlet weak var lblIpadMini: UILabel!
     @IBOutlet weak var lblTele: UILabel!
     @IBOutlet weak var lblAceleracion: UILabel!
     @IBOutlet weak var lblCertificacion: UILabel!
@@ -124,7 +130,7 @@ class SimuladorTableViewController: UITableViewController {
         if section == 0 {
             return 1
         } else if section == 1 {
-            return 9
+            return 11
         } else {
             return 2
         }
@@ -174,6 +180,28 @@ class SimuladorTableViewController: UITableViewController {
         self.updateTotales()
     }
     
+    @IBAction func SteperImpresora3D(_ sender: UIStepper) {
+        if tmpStepImpresora3D < Int(sender.value){
+            totalPuntos = Int(totalPuntos - stepImprespora3D);
+        } else {
+            totalPuntos = Int(totalPuntos + stepImprespora3D);
+        }
+        tmpStepImpresora3D = Int(sender.value)
+        lblImpresora3D.text = Int(sender.value).description;
+        self.updateTotales()
+    }
+    
+    @IBAction func SteperIpadMini(_ sender: UIStepper) {
+        if tmpStepIpadMini < Int(sender.value){
+            totalPuntos = Int(totalPuntos - stepIpadMini);
+        } else {
+            totalPuntos = Int(totalPuntos + stepIpadMini);
+        }
+        tmpStepIpadMini = Int(sender.value)
+        lblIpadMini.text = Int(sender.value).description;
+        self.updateTotales()
+    }
+    
     @IBAction func SteperTele(_ sender: UIStepper) {
         if tmpStepTele < Int(sender.value){
             totalPuntos = Int(totalPuntos - stepTele);
@@ -215,7 +243,7 @@ class SimuladorTableViewController: UITableViewController {
         }
         tmpStepDesarrollo = Int(sender.value)
         lblDesarrollo.text = Int(sender.value).description;
-        txtSaldoPesos.text = (totalPuntos * 17500).description
+        txtSaldoPesos.text = (totalPuntos * 20000).description
         self.updateTotales()
     }
     
@@ -227,7 +255,7 @@ class SimuladorTableViewController: UITableViewController {
         }
         tmpStepCertEts = Int(sender.value)
         lblCertEts.text = Int(sender.value).description;
-        txtSaldoPesos.text = (totalPuntos * 17500).description
+        txtSaldoPesos.text = (totalPuntos * 20000).description
         self.updateTotales()
     }
     
@@ -238,7 +266,7 @@ class SimuladorTableViewController: UITableViewController {
         totalAnios = 1
         
         if totalPuntos < 0 {
-            totalPesos = abs(totalPuntos) * 17500
+            totalPesos = abs(totalPuntos) * 20000
         } else {
             totalPesos = 0
             totalAnios = 0
@@ -289,9 +317,9 @@ class SimuladorTableViewController: UITableViewController {
         //        }
         
         let ptsAPagar = abs(totalPuntos)
-        let ptsEfectivo = Int(Int(sdoEfectivo) / 17500)
+        let ptsEfectivo = Int(Int(sdoEfectivo) / 20000)
         let ptsAnio = Int(Double(sdoAnios) * (Double(totalPuntosOriginal) / 3))
-        let ptsParticipacion = Int(Int(sdoParti) / 17500)
+        let ptsParticipacion = Int(Int(sdoParti) / 20000)
         
         var ptsAcumulados = 0
         
@@ -331,7 +359,7 @@ class SimuladorTableViewController: UITableViewController {
             
             // let tmpTotalAnios = Int(ceil(Double(ptsRestantes) / Double(totalPuntosOriginal / 3)))
             let tmpTotalAnios = 1
-            let tmpTotalpesos: Int = ptsRestantes * 17500
+            let tmpTotalpesos: Int = ptsRestantes * 20000
             
             if changeAnios
             {
@@ -426,10 +454,13 @@ class SimuladorTableViewController: UITableViewController {
             "\"makerCart\":" + tmpStepCart.description + "," +
             "\"aulaMaker\":" + tmpStepMaker.description + "," +
             "\"proyector\":" + tmpStepProyecto.description + "," +
+            "\"impresora3D\":" + tmpStepImpresora3D.description + "," +
+            "\"ipadMini\":" + tmpStepIpadMini.description + "," +
             "\"telepresencia\":" + tmpStepTele.description + "," +
             "\"aceleracon\":" + tmpStepAceleracion.description + "," +
             "\"certificacion\":" + tmpStepCertificacion.description + "," +
-            "\"desarrollo\":" + tmpStepDesarrollo.description + "" +
+            "\"desarrollo\":" + tmpStepDesarrollo.description + "," +
+            "\"certEts\":" + tmpStepCertEts.description + "" +
             "}," +
             "\"puntosTotales\":" + totalPuntosOriginal.description + "," +
             "\"puntosUsados\":150," +
@@ -458,7 +489,8 @@ class SimuladorTableViewController: UITableViewController {
         appDelegate.storeProposal(
             vendedorId: vendorId
             , schoolId: Int(idEscuela)!
-            , schoolName: nombreEscuela, cp: Int(cp)!
+            , schoolName: nombreEscuela
+            , cp: Int(cp)!
             , col: colonia
             , street: calle
             , streetNo: numero
@@ -468,10 +500,13 @@ class SimuladorTableViewController: UITableViewController {
             , makerCart: tmpStepCart
             , aulaMaker: tmpStepMaker
             , proyector: tmpStepProyecto
+            , impresora3D: tmpStepImpresora3D
             , telepresencia: tmpStepTele
+            , ipadMini: tmpStepIpadMini
             , aceleracon: tmpStepAceleracion
             , certificacion: tmpStepCertificacion
             , desarrollo: tmpStepDesarrollo
+            , certEts: tmpStepCertEts
             , totalPesos: Double(totalPesos)
             , totalAnios: totalAnios
             , totalPesosExt: Double(totalPesosExt)

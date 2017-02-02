@@ -27,13 +27,15 @@ class SimuladorViewController: UIViewController {
     
     // VALORES QUE DESCUENTA CADA ELEMENTO
     var stepAula = 2
-    var stepCart = 3
-    var stepMaker = 18
-    var stepProyecto = 2
-    var stepTele = 20
-    var stepAceleracion = 4
-    var stepCertificacion = 12
-    var stepDesarrollo = 20
+    var stepMaker = 20 //Maker Club
+    var stepCart = 4
+    var stepProyecto = 3
+    var stepImprespora3D = 2
+    var stepIpadMini = 1
+    var stepTele = 23 //AULA DE FORMACIÓN A DISTANCIA
+    var stepAceleracion = 5 //sincronizacion
+    var stepDesarrollo = 16
+    var stepCertificacion = 14
     var stepCertEts = 1
     
     // VARIABLES AUXILIARES PARA DETECTAR INCREMENTO O DECREMENTO
@@ -41,6 +43,8 @@ class SimuladorViewController: UIViewController {
     var tmpStepCart = 0
     var tmpStepMaker = 0
     var tmpStepProyecto = 0
+    var tmpStepImpresora3D = 0
+    var tmpStepIpadMini = 0
     var tmpStepTele = 0
     var tmpStepAceleracion = 0
     var tmpStepCertificacion = 0
@@ -69,11 +73,14 @@ class SimuladorViewController: UIViewController {
     let searchController = UISearchController(searchResultsController: nil)
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-
+    
+    @IBOutlet weak var ScrollView: UIScrollView!
     @IBOutlet weak var LblAula: UILabel!
     @IBOutlet weak var lblCart: UILabel!
     @IBOutlet weak var lblMaker: UILabel!
     @IBOutlet weak var lblProyecto: UILabel!
+    @IBOutlet weak var lblImpresora3D: UILabel!
+    @IBOutlet weak var lblIpadMini: UILabel!
     @IBOutlet weak var lblTele: UILabel!
     @IBOutlet weak var lblAceleracion: UILabel!
     @IBOutlet weak var lblCertificacion: UILabel!
@@ -101,7 +108,6 @@ class SimuladorViewController: UIViewController {
         
         print("ID: " + idEscuela)
         print("NOMBRE: " + nombreEscuela)
-        
         txtNombreEscuela.text = nombreEscuela
         
         let tapGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.tapBlurButton(_:)))
@@ -112,6 +118,8 @@ class SimuladorViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: - Table view data source
     
     @IBAction func SteperAula(_ sender: UIStepper) {
         if tmpStepAula < Int(sender.value){
@@ -157,6 +165,28 @@ class SimuladorViewController: UIViewController {
         self.updateTotales()
     }
     
+    @IBAction func SteperImpresora3D(_ sender: UIStepper) {
+        if tmpStepImpresora3D < Int(sender.value){
+            totalPuntos = Int(totalPuntos - stepImprespora3D);
+        } else {
+            totalPuntos = Int(totalPuntos + stepImprespora3D);
+        }
+        tmpStepImpresora3D = Int(sender.value)
+        lblImpresora3D.text = Int(sender.value).description;
+        self.updateTotales()
+    }
+    
+    @IBAction func SteperIpadMini(_ sender: UIStepper) {
+        if tmpStepIpadMini < Int(sender.value){
+            totalPuntos = Int(totalPuntos - stepIpadMini);
+        } else {
+            totalPuntos = Int(totalPuntos + stepIpadMini);
+        }
+        tmpStepIpadMini = Int(sender.value)
+        lblIpadMini.text = Int(sender.value).description;
+        self.updateTotales()
+    }
+    
     @IBAction func SteperTele(_ sender: UIStepper) {
         if tmpStepTele < Int(sender.value){
             totalPuntos = Int(totalPuntos - stepTele);
@@ -198,7 +228,7 @@ class SimuladorViewController: UIViewController {
         }
         tmpStepDesarrollo = Int(sender.value)
         lblDesarrollo.text = Int(sender.value).description;
-        txtSaldoPesos.text = (totalPuntos * 17500).description
+        txtSaldoPesos.text = (totalPuntos * 20000).description
         self.updateTotales()
     }
     
@@ -210,7 +240,7 @@ class SimuladorViewController: UIViewController {
         }
         tmpStepCertEts = Int(sender.value)
         lblCertEts.text = Int(sender.value).description;
-        txtSaldoPesos.text = (totalPuntos * 17500).description
+        txtSaldoPesos.text = (totalPuntos * 20000).description
         self.updateTotales()
     }
     
@@ -221,7 +251,7 @@ class SimuladorViewController: UIViewController {
         totalAnios = 1
         
         if totalPuntos < 0 {
-            totalPesos = abs(totalPuntos) * 17500
+            totalPesos = abs(totalPuntos) * 20000
         } else {
             totalPesos = 0
             totalAnios = 0
@@ -265,16 +295,16 @@ class SimuladorViewController: UIViewController {
             sdoAnios = Int(txtSaldoAnios.text!)!
         }
         
-//        if txtSaldoParticipacion.text == "" {
-//            sdoParti = 0
-//        } else {
-//            sdoParti = Int(txtSaldoParticipacion.text!)!
-//        }
+        //        if txtSaldoParticipacion.text == "" {
+        //            sdoParti = 0
+        //        } else {
+        //            sdoParti = Int(txtSaldoParticipacion.text!)!
+        //        }
         
         let ptsAPagar = abs(totalPuntos)
-        let ptsEfectivo = Int(Int(sdoEfectivo) / 17500)
+        let ptsEfectivo = Int(Int(sdoEfectivo) / 20000)
         let ptsAnio = Int(Double(sdoAnios) * (Double(totalPuntosOriginal) / 3))
-        let ptsParticipacion = Int(Int(sdoParti) / 17500)
+        let ptsParticipacion = Int(Int(sdoParti) / 20000)
         
         var ptsAcumulados = 0
         
@@ -297,10 +327,10 @@ class SimuladorViewController: UIViewController {
         
         if ptsRestantes < 0
         {
-//            let alertController = UIAlertController(title: "Error", message: "Importes no válidos", preferredStyle: UIAlertControllerStyle.alert)
-//            alertController.addAction(UIAlertAction(title: "Cerrar", style: UIAlertActionStyle.default,handler: nil))
-//            self.present(alertController, animated: true, completion: nil)
-//            updateTotales()
+            //            let alertController = UIAlertController(title: "Error", message: "Importes no válidos", preferredStyle: UIAlertControllerStyle.alert)
+            //            alertController.addAction(UIAlertAction(title: "Cerrar", style: UIAlertActionStyle.default,handler: nil))
+            //            self.present(alertController, animated: true, completion: nil)
+            //            updateTotales()
             if changeAnios
             {
                 txtSaldoPesos2.text = 0.description
@@ -314,7 +344,7 @@ class SimuladorViewController: UIViewController {
             
             // let tmpTotalAnios = Int(ceil(Double(ptsRestantes) / Double(totalPuntosOriginal / 3)))
             let tmpTotalAnios = 1
-            let tmpTotalpesos: Int = ptsRestantes * 17500
+            let tmpTotalpesos: Int = ptsRestantes * 20000
             
             if changeAnios
             {
@@ -359,19 +389,26 @@ class SimuladorViewController: UIViewController {
                 self.btnGuardar.isHidden = false
                 self.loaderGuarda.isHidden = true
                 
-                let alertController = UIAlertController(title: "UNOi", message: result, preferredStyle: UIAlertControllerStyle.alert)
-                alertController.addAction(UIAlertAction(title: "Cerrar", style: UIAlertActionStyle.default,handler: nil))
+                let alertController = UIAlertController(
+                    title: "UNOi",
+                    message: result,
+                    preferredStyle: UIAlertControllerStyle.alert)
+                
+                let closeAction = UIAlertAction(
+                    title: "Cerrar",
+                    style: UIAlertActionStyle.default,
+                    handler: {(alert: UIAlertAction!) -> Void in
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let controller = storyboard.instantiateViewController(withIdentifier: "NavController")
+                        self.present(controller, animated: true, completion: nil)
+                        
+                })
+                
+                alertController.addAction(closeAction)
+                
                 self.present(alertController, animated: true, completion: nil)
             }
         }
-    }
-    
-    @IBAction func clickMas(_ sender: UIButton) {
-//        sender.isHidden = true
-//        lblExtension.isHidden = false
-//        txtSaldoAnios.isHidden = false
-//        lblSaldoPesos2.isHidden = false
-//        txtSaldoPesos2.isHidden = false
     }
     
     func tapBlurButton(_ sender: UILongPressGestureRecognizer) {
@@ -379,18 +416,6 @@ class SimuladorViewController: UIViewController {
         txtSaldoAnios.isHidden = false
         lblSaldoPesos2.isHidden = false
         txtSaldoPesos2.isHidden = false
-    }
-    
-    func longTap(sender : UIGestureRecognizer){
-        print("Long tap")
-        if sender.state == .ended {
-            print("UIGestureRecognizerStateEnded")
-            //Do Whatever You want on End of Gesture
-        }
-        else if sender.state == .began {
-            print("UIGestureRecognizerStateBegan.")
-            //Do Whatever You want on Began of Gesture
-        }
     }
     
     func guardaPropuesta(completion: @escaping (_ result: String?)->()){
@@ -414,10 +439,13 @@ class SimuladorViewController: UIViewController {
             "\"makerCart\":" + tmpStepCart.description + "," +
             "\"aulaMaker\":" + tmpStepMaker.description + "," +
             "\"proyector\":" + tmpStepProyecto.description + "," +
+            "\"impresora3D\":" + tmpStepImpresora3D.description + "," +
+            "\"ipadMini\":" + tmpStepIpadMini.description + "," +
             "\"telepresencia\":" + tmpStepTele.description + "," +
             "\"aceleracon\":" + tmpStepAceleracion.description + "," +
             "\"certificacion\":" + tmpStepCertificacion.description + "," +
-            "\"desarrollo\":" + tmpStepDesarrollo.description + "" +
+            "\"desarrollo\":" + tmpStepDesarrollo.description + "," +
+            "\"certEts\":" + tmpStepCertEts.description + "" +
             "}," +
             "\"puntosTotales\":" + totalPuntosOriginal.description + "," +
             "\"puntosUsados\":150," +
@@ -446,7 +474,8 @@ class SimuladorViewController: UIViewController {
         appDelegate.storeProposal(
             vendedorId: vendorId
             , schoolId: Int(idEscuela)!
-            , schoolName: nombreEscuela, cp: Int(cp)!
+            , schoolName: nombreEscuela
+            , cp: Int(cp)!
             , col: colonia
             , street: calle
             , streetNo: numero
@@ -456,10 +485,13 @@ class SimuladorViewController: UIViewController {
             , makerCart: tmpStepCart
             , aulaMaker: tmpStepMaker
             , proyector: tmpStepProyecto
+            , impresora3D: tmpStepImpresora3D
             , telepresencia: tmpStepTele
+            , ipadMini: tmpStepIpadMini
             , aceleracon: tmpStepAceleracion
             , certificacion: tmpStepCertificacion
             , desarrollo: tmpStepDesarrollo
+            , certEts: tmpStepCertEts
             , totalPesos: Double(totalPesos)
             , totalAnios: totalAnios
             , totalPesosExt: Double(totalPesosExt)
@@ -467,43 +499,43 @@ class SimuladorViewController: UIViewController {
         )
         
         
-//        // create post request
-//        let url = NSURL(string: "https://ruta.unoi.com/api/v0/simCosts/proposal")!
-//        let request = NSMutableURLRequest(url: url as URL)
-//        request.httpMethod = "POST"
-//        
-//        // insert json data to the request
-//        request.httpBody = postString.data(using: .utf8)
-//        
-//        let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
-//            guard let data = data, error == nil else {
-//                // check for fundamental networking error
-//                print("error=\(error)")
-//                return
-//            }
-//            
-//            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-//                // check for http errors
-//                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-//                print("response = \(response)")
-//            }
-//            
-//            //let responseString = String(data: data, encoding: .utf8)
-//            
-//            do {
-//                let mJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
-//                if let mStatus = mJson["status"] as? [String:AnyObject]
-//                {
-//                    if let mMessage = mStatus["message"] as? String
-//                    {
-                        completion("Se ha guardado la propuesta")
-//                    }
-//                }
-//            } catch let error as NSError {
-//                print(error.localizedDescription)
-//            }
-//        }
-//        
-//        task.resume()
+        //        // create post request
+        //        let url = NSURL(string: "https://ruta.unoi.com/api/v0/simCosts/proposal")!
+        //        let request = NSMutableURLRequest(url: url as URL)
+        //        request.httpMethod = "POST"
+        //
+        //        // insert json data to the request
+        //        request.httpBody = postString.data(using: .utf8)
+        //
+        //        let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
+        //            guard let data = data, error == nil else {
+        //                // check for fundamental networking error
+        //                print("error=\(error)")
+        //                return
+        //            }
+        //
+        //            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+        //                // check for http errors
+        //                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+        //                print("response = \(response)")
+        //            }
+        //
+        //            //let responseString = String(data: data, encoding: .utf8)
+        //
+        //            do {
+        //                let mJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+        //                if let mStatus = mJson["status"] as? [String:AnyObject]
+        //                {
+        //                    if let mMessage = mStatus["message"] as? String
+        //                    {
+        completion("Se ha guardado la propuesta")
+        //                    }
+        //                }
+        //            } catch let error as NSError {
+        //                print(error.localizedDescription)
+        //            }
+        //        }
+        //
+        //        task.resume()
     }
 }

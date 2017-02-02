@@ -165,6 +165,7 @@ class ColegioViewController: UIViewController, UITextFieldDelegate, CLLocationMa
         print(numPuntos)
         //txtPuntos.text = numPuntos.description;
         
+        
         //let svc = segue.destination as! SimuladorViewController;
         let svc = segue.destination as! SimuladorTableViewController;
         

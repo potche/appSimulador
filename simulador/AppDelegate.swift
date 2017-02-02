@@ -132,7 +132,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return myId
     }
     
-    func storeProposal (vendedorId: Int, schoolId: Int, schoolName: String, cp: Int, col: String, street: String, streetNo: String, contactName: String, contactMail: String, aulaDigital: Int, makerCart: Int, aulaMaker: Int, proyector: Int, telepresencia: Int, aceleracon: Int, certificacion: Int, desarrollo: Int, totalPesos: Double, totalAnios:Int, totalPesosExt: Double, totalPuntos: Int) {
+    func storeProposal (
+        vendedorId: Int,
+        schoolId: Int,
+        schoolName: String,
+        cp: Int,
+        col: String,
+        street: String,
+        streetNo: String,
+        contactName: String,
+        contactMail: String,
+        aulaDigital: Int,
+        makerCart: Int,
+        aulaMaker: Int,
+        proyector: Int,
+        impresora3D: Int,
+        telepresencia: Int,
+        ipadMini: Int,
+        aceleracon: Int,
+        certificacion: Int,
+        desarrollo: Int,
+        certEts: Int,
+        totalPesos: Double,
+        totalAnios:Int,
+        totalPesosExt: Double,
+        totalPuntos: Int) {
+        
         let context = getContext()
         let entity =  NSEntityDescription.entity(forEntityName: "Propuestas", in: context)
         let transc = NSManagedObject(entity: entity!, insertInto: context)
@@ -149,10 +174,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         transc.setValue(makerCart, forKey: "makerCart")
         transc.setValue(aulaMaker, forKey: "aulaMaker")
         transc.setValue(proyector, forKey: "proyector")
+        transc.setValue(impresora3D, forKey: "impresora3D")
         transc.setValue(telepresencia, forKey: "telepresencia")
+        transc.setValue(ipadMini, forKey: "ipadMini")
         transc.setValue(aceleracon, forKey: "aceleracon")
         transc.setValue(certificacion, forKey: "certificacion")
         transc.setValue(desarrollo, forKey: "desarrollo")
+        transc.setValue(certEts, forKey: "certEts")
         transc.setValue(vendedorId, forKey: "vendedorId")
         transc.setValue(Date(), forKey: "creationDate")
         transc.setValue(totalPuntos, forKey: "totalPuntos")
@@ -189,10 +217,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 mPropuesta.makerCart = trans.value(forKey: "makerCart") as! Int
                 mPropuesta.aulaMaker = trans.value(forKey: "aulaMaker") as! Int
                 mPropuesta.proyector = trans.value(forKey: "proyector") as! Int
+                mPropuesta.impresora3D = trans.value(forKey: "impresora3D") as! Int
                 mPropuesta.telepresencia = trans.value(forKey: "telepresencia") as! Int
+                mPropuesta.ipadMini = trans.value(forKey: "ipadMini") as! Int
                 mPropuesta.aceleracon = trans.value(forKey: "aceleracon") as! Int
                 mPropuesta.certificacion = trans.value(forKey: "certificacion") as! Int
                 mPropuesta.desarrollo = trans.value(forKey: "desarrollo") as! Int
+                mPropuesta.certEts = trans.value(forKey: "certEts") as! Int
                 mPropuesta.vendedorId = trans.value(forKey: "vendedorId") as! Int
                 mPropuesta.creationDate = trans.value(forKey: "creationDate") as! Date
                 mPropuesta.totalPuntos = trans.value(forKey: "totalPuntos") as! Int

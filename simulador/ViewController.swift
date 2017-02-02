@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import LocalAuthentication
 
 class ViewController: UIViewController, UITextFieldDelegate {
 
@@ -39,9 +40,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if appDelegate.getTranscriptions() > 0
-        {
-            changeScreen()
+        if appDelegate.getTranscriptions() > 0 {
+            let touchID: Bool = self.touchIDCall(reasonString: "Usar Touch ID")
+            
+            print(touchID)
+//            changeScreen()
         }
     }
 
@@ -96,11 +99,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 self.loaderLogin.isHidden = true
                 
                 if result == "ok" {
+                    
                     print("CAMBIANDO PANTALLA")
                     
                     
                     self.appDelegate.storeTranscription(personId: self.personId, personName: self.personName)
-                    self.changeScreen()
+                    let touchID: Bool = self.touchIDCall(reasonString: "¿Desea usar Touch ID para esta aplicación?")
+                    
+                    if (touchID){
+                        
+                    }else{
+                        self.changeScreen()
+                    }
                     
                 } else {
                     print("ERROR")
@@ -157,6 +167,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
                             self.personId = (mJson["results"]?["personId"] as? Int)!
                             self.personName = (mJson["results"]?["name"] as? String)!
                             print(self.personId)
+                            
+                            
                         }
                         completion(mMessage)
                     }
@@ -198,6 +210,86 @@ class ViewController: UIViewController, UITextFieldDelegate {
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return false
     }
+    
+    func touchIDCall(reasonString: String) -> Bool{
+        let authContext: LAContext = LAContext()
+        var error: NSError?
+        
+        var ok = true
+        
+        if authContext.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &error ){
+            authContext.evaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: {
+                (wasSuccessful, error) -> Void in
+                if wasSuccessful{
+                    NSLog("OK")
+                    self.changeScreen()
+                }else{
+                    NSLog("Boooo")
+                }
+                
+            })
+        }else{
+           ok = false
+        }
+        
+        return ok
+    }
+
+
+    func touchID(reasonString: String) -> Bool {
+        // Get the local authentication context.
+        let context = LAContext()
+        
+        // Declare a NSError variable.
+        var error: NSError?
+        
+        
+        var ok = true
+        
+        // Check if the device can evaluate the policy.
+        if context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            context .evaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: { (success, error) -> Void in
+                
+                if success {
+                    
+                }
+                else{
+                    // If authentication failed then show a message to the console with a short description.
+                    // In case that the error is a user fallback, then show the password alert view.
+                    print(error?.localizedDescription as Any)
+                    
+                    
+                    ok = false
+                }
+                
+                
+            })
+        }
+        else{
+            // If the security policy cannot be evaluated then show a short message depending on the error.
+            switch error!.code{
+                
+            case LAError.touchIDNotEnrolled.rawValue:
+                print("TouchID is not enrolled")
+                
+            case LAError.passcodeNotSet.rawValue:
+                print("A passcode has not been set")
+                
+            default:
+                // The LAError.TouchIDNotAvailable case.
+                print("TouchID not available")
+            }
+            
+            // Optionally the error description can be displayed on the console.
+            print(error?.localizedDescription as Any)
+            
+            // Show the custom alert view to allow users to enter the password.
+            //self.showPasswordAlert()
+        }
+        
+        return ok
+    }
+    
 
 }
 
